@@ -1,15 +1,11 @@
-import { useRef, useState } from 'react';
-import { usePurchases } from 'src/common/hook/usePurchases';
-import { IRecipe } from 'src/interface/IRecipe';
+import { IRecipe, IRecipeItem } from 'src/interface/IRecipe';
 import styled from 'styled-components';
 
-export const RecipeComponent = () => {
-  const [start, setStart] = useState(0);
-  const limit = 10;
-  const [ikeaId, setIkeaId] = useState('');
+type Props = {
+  receipeData: IRecipe;
+};
 
-  const { data } = usePurchases(start, limit, ikeaId);
-
+const Recipe = ({ receipeData }: Props) => {
   const handleCopyRecipe = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -18,14 +14,15 @@ export const RecipeComponent = () => {
       alert('복사 실패');
     }
   };
+  // console.log(receipeData);
 
   return (
     <RecipeContainer>
-      {data
-        ? data.list.map((recipe: IRecipe) => {
+      {receipeData
+        ? receipeData.list.map((recipe: IRecipeItem) => {
             return (
               <RecipeWrap key={recipe.id}>
-                <Recipe style={{ fontWeight: 'bold' }}>
+                <RecipeLine style={{ fontWeight: 'bold' }}>
                   <span style={{ display: 'inline-block', width: 200 }}>
                     {new Intl.DateTimeFormat('kr', {
                       dateStyle: 'full',
@@ -35,8 +32,8 @@ export const RecipeComponent = () => {
                   <span onClick={() => handleCopyRecipe(recipe.tag)}>
                     {recipe.tag}
                   </span>
-                </Recipe>
-                <Recipe>
+                </RecipeLine>
+                <RecipeLine>
                   <span>{recipe.storeName} </span>
                   <span>
                     / {recipe.status === 'COMPLETE' ? '구매완료' : '진행중'} /{' '}
@@ -47,7 +44,7 @@ export const RecipeComponent = () => {
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     원
                   </span>
-                </Recipe>
+                </RecipeLine>
               </RecipeWrap>
             );
           })
@@ -60,7 +57,7 @@ const RecipeContainer = styled.div`
   padding: 0px 20px;
 `;
 
-const Recipe = styled.div`
+const RecipeLine = styled.div`
   padding: 10px 20px;
   width: 100%;
 `;
@@ -75,3 +72,5 @@ const RecipeWrap = styled.div`
   border: 1px solid #ccc;
   background-color: #fff;
 `;
+
+export default Recipe;

@@ -1,10 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchPurchases } from 'src/service/api';
-import { requestAPI } from '../util/fetch';
+import { recipe } from 'src/common/service/api';
 
-export const usePurchases = (start: number, limit: number, ikeaId?: string) => {
-  return useQuery(
-    ['purchases'],
-    async () => await fetchPurchases(start, limit, ikeaId)
-  );
+const useRecipe = () => {
+  const usePurchases = (start: number, limit: number, ikeaId?: string) => {
+    return useQuery(
+      ['purchases'],
+      async () => await recipe.fetchPurchases(start, limit, ikeaId)
+    );
+  };
+  return {
+    usePurchases,
+  };
 };
+
+export default useRecipe;

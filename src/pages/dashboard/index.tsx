@@ -1,14 +1,39 @@
-import { RecipeComponent } from 'src/components/RecipeComponent';
+import Recipe from 'src/components/Recipe';
 import styled from 'styled-components';
+import useRecipe from 'src/common/hook/usePurchases';
+import { GetServerSideProps } from 'next';
+import { useQuery, dehydrate } from '@tanstack/react-query';
+import { recipe } from 'src/common/service/api';
+import { QueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { start } = query;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(
+    ['purchases'],
+    async () => await recipe.fetchPurchases(Number(start), 10, '')
+  );
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
 
 const DashBoard = () => {
+  const { start } = useRouter().query;
+  const { usePurchases } = useRecipe();
+  const { data: receipeData } = usePurchases(Number(start), 10, '');
+
   return (
     <>
       <SearchWrap>
         <SearchInput></SearchInput>
         <SearchBtn>영수증 검색</SearchBtn>
       </SearchWrap>
-      <RecipeComponent />
+      <Recipe receipeData={receipeData} />
     </>
   );
 };

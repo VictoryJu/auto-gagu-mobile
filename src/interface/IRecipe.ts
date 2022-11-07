@@ -1,4 +1,9 @@
 export interface IRecipe {
+  list: IRecipeItem[];
+  allCount: number;
+}
+
+export interface IRecipeItem {
   id: number;
   craeteTime: string;
   isProcStocks: number;

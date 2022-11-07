@@ -1,3 +1,3 @@
 import auth from './auth';
-
-export { auth };
+import recipe from './recipe';
+export { auth, recipe };
