@@ -1,12 +1,20 @@
+import { useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const Login = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useLayoutEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.focus();
+    }
+  });
+
   return (
     <>
       <Container>
         <Wrap>
           <Title>관리자 비밀번호</Title>
-          <Input placeholder="비밀번호" type="tel" />
+          <Input ref={inputRef} placeholder="비밀번호" type="tel" />
           <Div>
             <LoginBtn>로그인</LoginBtn>
           </Div>
