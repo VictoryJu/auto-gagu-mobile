@@ -1,21 +1,42 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
+import { auth } from 'src/common/service/api';
+import { useSetRecoilState } from 'recoil';
+import { LoginAtom } from 'src/common/recoil/atom/auth';
 const Login = () => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [password, setPassword] = useState<string | number>('');
+  const setLogin = useSetRecoilState(LoginAtom);
   useLayoutEffect(() => {
     if (inputRef.current !== null) {
       inputRef.current.focus();
     }
-  });
+  }, []);
+
+  const login = async () => {
+    const res = await auth.login(password);
+    if (res === undefined) {
+      alert('비밀번호가 일치하지 않습니다.');
+      setLogin(false);
+    } else {
+      setLogin(true);
+    }
+  };
 
   return (
     <>
       <Container>
         <Wrap>
           <Title>관리자 비밀번호</Title>
-          <Input ref={inputRef} placeholder="비밀번호" type="tel" />
-          <Div>
+          <Input
+            ref={inputRef}
+            placeholder="비밀번호"
+            type="tel"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <Div onClick={login}>
             <LoginBtn>로그인</LoginBtn>
           </Div>
         </Wrap>
