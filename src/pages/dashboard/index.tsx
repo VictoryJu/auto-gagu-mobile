@@ -6,14 +6,13 @@ import { useQuery, dehydrate } from '@tanstack/react-query';
 import { recipe } from 'src/common/service/api';
 import { QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { start } = query;
+export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
-
   await queryClient.prefetchQuery(
-    ['purchases'],
-    async () => await recipe.fetchPurchases(Number(start), 10, '')
+    ['purchases', 0],
+    async () => await recipe.fetchPurchases(Number(0), 10, '')
   );
   return {
     props: {
@@ -23,9 +22,18 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 const DashBoard = () => {
-  const { start } = useRouter().query;
+  const [start, setStart] = useState(0);
+  const [page, setPage] = useState(1);
   const { usePurchases } = useRecipe();
   const { data: receipeData } = usePurchases(Number(start), 10, '');
+
+  const onChange = useCallback(
+    (LPage: number) => {
+      setPage(LPage);
+      setStart((LPage - 1) * 10);
+    },
+    [page]
+  );
 
   return (
     <>
@@ -33,7 +41,7 @@ const DashBoard = () => {
         <SearchInput></SearchInput>
         <SearchBtn>영수증 검색</SearchBtn>
       </SearchWrap>
-      <Recipe receipeData={receipeData} />
+      <Recipe receipeData={receipeData} onChange={onChange} page={page} />
     </>
   );
 };

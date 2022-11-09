@@ -10,11 +10,14 @@ import { RecoilRoot } from 'recoil';
 import { GlobalStyle } from 'styles/Global';
 import { Theme } from 'styles/Theme';
 import Layout from 'src/components/Layout';
+import '../../styles/pageNation.css';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <Hydrate state={pageProps.dehydratedState}>
         <RecoilRoot>
           <ThemeProvider theme={Theme}>

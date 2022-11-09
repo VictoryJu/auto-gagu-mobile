@@ -1,11 +1,16 @@
+import React, { useState, useLayoutEffect } from 'react';
 import { IRecipe, IRecipeItem } from 'src/interface/IRecipe';
 import styled from 'styled-components';
+import UsePagination from 'src/common/hook/usePagination';
+import useRecipe from 'src/common/hook/usePurchases';
 
 type Props = {
   receipeData: IRecipe;
+  onChange: Function;
+  page: number;
 };
 
-const Recipe = ({ receipeData }: Props) => {
+const Recipe = ({ receipeData, onChange, page }: Props) => {
   const handleCopyRecipe = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -14,42 +19,51 @@ const Recipe = ({ receipeData }: Props) => {
       alert('복사 실패');
     }
   };
-  // console.log(receipeData);
+  console.log('늘그니');
 
   return (
-    <RecipeContainer>
-      {receipeData
-        ? receipeData.list.map((recipe: IRecipeItem) => {
-            return (
-              <RecipeWrap key={recipe.id}>
-                <RecipeLine style={{ fontWeight: 'bold' }}>
-                  <span style={{ display: 'inline-block', width: 200 }}>
-                    {new Intl.DateTimeFormat('kr', {
-                      dateStyle: 'full',
-                    }).format(new Date(recipe.paymentTime))}{' '}
-                    /
-                  </span>
-                  <span onClick={() => handleCopyRecipe(recipe.tag)}>
-                    {recipe.tag}
-                  </span>
-                </RecipeLine>
-                <RecipeLine>
-                  <span>{recipe.storeName} </span>
-                  <span>
-                    / {recipe.status === 'COMPLETE' ? '구매완료' : '진행중'} /{' '}
-                  </span>
-                  <span style={{ fontWeight: 'bold' }}>
-                    {recipe.paymentAmount
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    원
-                  </span>
-                </RecipeLine>
-              </RecipeWrap>
-            );
-          })
-        : ''}
-    </RecipeContainer>
+    <>
+      {receipeData && (
+        <UsePagination
+          page={page}
+          totalCount={receipeData?.allCount}
+          callBack={onChange}
+        />
+      )}
+      <RecipeContainer>
+        {receipeData
+          ? receipeData.list.map((recipe: IRecipeItem) => {
+              return (
+                <RecipeWrap key={recipe.id}>
+                  <RecipeLine style={{ fontWeight: 'bold' }}>
+                    <span style={{ display: 'inline-block', width: 200 }}>
+                      {new Intl.DateTimeFormat('kr', {
+                        dateStyle: 'full',
+                      }).format(new Date(recipe.paymentTime))}{' '}
+                      /
+                    </span>
+                    <span onClick={() => handleCopyRecipe(recipe.tag)}>
+                      {recipe.tag}
+                    </span>
+                  </RecipeLine>
+                  <RecipeLine>
+                    <span>{recipe.storeName} </span>
+                    <span>
+                      / {recipe.status === 'COMPLETE' ? '구매완료' : '진행중'} /{' '}
+                    </span>
+                    <span style={{ fontWeight: 'bold' }}>
+                      {recipe.paymentAmount
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      원
+                    </span>
+                  </RecipeLine>
+                </RecipeWrap>
+              );
+            })
+          : ''}
+      </RecipeContainer>
+    </>
   );
 };
 
@@ -73,4 +87,4 @@ const RecipeWrap = styled.div`
   background-color: #fff;
 `;
 
-export default Recipe;
+export default React.memo(Recipe);

@@ -4,7 +4,7 @@ import { recipe } from 'src/common/service/api';
 const useRecipe = () => {
   const usePurchases = (start: number, limit: number, ikeaId?: string) => {
     return useQuery(
-      ['purchases'],
+      ['purchases', start],
       async () => await recipe.fetchPurchases(start, limit, ikeaId)
     );
   };

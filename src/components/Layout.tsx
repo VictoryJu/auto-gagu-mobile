@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { LoginAtom } from 'src/common/recoil/atom/auth';
 import Login from './Login';
@@ -10,7 +10,7 @@ type Props = {
 const Layout = ({ children }: Props) => {
   const loginAtom = useRecoilValue(LoginAtom);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (loginAtom) {
       setIsLoggedIn(true);
     }
