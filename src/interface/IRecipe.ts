@@ -3,6 +3,11 @@ export interface IRecipe {
   allCount: number;
 }
 
+export interface IRecipeModal {
+  show: boolean;
+  data: IRecipeItem | any;
+}
+
 export interface IRecipeItem {
   id: number;
   craeteTime: string;

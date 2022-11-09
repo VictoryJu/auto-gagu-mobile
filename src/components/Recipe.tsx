@@ -3,6 +3,8 @@ import { IRecipe, IRecipeItem } from 'src/interface/IRecipe';
 import styled from 'styled-components';
 import UsePagination from 'src/common/hook/usePagination';
 import useRecipe from 'src/common/hook/usePurchases';
+import { useSetRecoilState } from 'recoil';
+import { modalAtom } from 'src/common/recoil/atom/modal';
 
 type Props = {
   receipeData: IRecipe;
@@ -11,6 +13,7 @@ type Props = {
 };
 
 const Recipe = ({ receipeData, onChange, page }: Props) => {
+  const setModal = useSetRecoilState(modalAtom);
   const handleCopyRecipe = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -19,7 +22,6 @@ const Recipe = ({ receipeData, onChange, page }: Props) => {
       alert('복사 실패');
     }
   };
-  console.log('늘그니');
 
   return (
     <>
@@ -34,7 +36,15 @@ const Recipe = ({ receipeData, onChange, page }: Props) => {
         {receipeData
           ? receipeData.list.map((recipe: IRecipeItem) => {
               return (
-                <RecipeWrap key={recipe.id}>
+                <RecipeWrap
+                  key={recipe.id}
+                  onClick={() => {
+                    setModal({
+                      show: true,
+                      data: recipe,
+                    });
+                  }}
+                >
                   <RecipeLine style={{ fontWeight: 'bold' }}>
                     <span style={{ display: 'inline-block', width: 200 }}>
                       {new Intl.DateTimeFormat('kr', {

@@ -7,6 +7,7 @@ import { recipe } from 'src/common/service/api';
 import { QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import RecipeModal from 'src/components/RecipeModal';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const DashBoard = () => {
     },
     [page]
   );
+  console.log(receipeData);
 
   return (
     <>
@@ -42,6 +44,7 @@ const DashBoard = () => {
         <SearchBtn>영수증 검색</SearchBtn>
       </SearchWrap>
       <Recipe receipeData={receipeData} onChange={onChange} page={page} />
+      <RecipeModal />
     </>
   );
 };
