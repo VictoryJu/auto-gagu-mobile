@@ -41,7 +41,10 @@ const Recipe = ({ receipeData, onChange, page }: Props) => {
                   onClick={() => {
                     setModal({
                       show: true,
-                      data: recipe,
+                      data: {
+                        ...recipe,
+                        parseData: JSON.parse(recipe.productsJson),
+                      },
                     });
                   }}
                 >

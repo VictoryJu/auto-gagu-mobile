@@ -9,7 +9,7 @@ export const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    width: '100%',
+    width: '80%',
     height: '50%',
     borderRadius: 14,
     border: '1px solid transparent',

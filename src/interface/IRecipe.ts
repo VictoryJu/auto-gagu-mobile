@@ -8,6 +8,23 @@ export interface IRecipeModal {
   data: IRecipeItem | any;
 }
 
+export interface IRecipeDetail {
+  name: string;
+  description: string;
+  href: string;
+  quantity: string;
+  decimalQuantity: number;
+  priceUnitText: string;
+  id: string;
+  splitDelivery: boolean;
+  image: {
+    small: string;
+    medium: string;
+  };
+  referencedItems: string;
+  assemblyRequired: boolean;
+}
+
 export interface IRecipeItem {
   id: number;
   craeteTime: string;
