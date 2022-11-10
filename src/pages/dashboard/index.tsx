@@ -8,6 +8,8 @@ import { QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import RecipeModal from 'src/components/RecipeModal';
+import { useRecoilValue } from 'recoil';
+import { modalAtom } from 'src/common/recoil/atom/modal';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
@@ -27,7 +29,7 @@ const DashBoard = () => {
   const [page, setPage] = useState(1);
   const { usePurchases } = useRecipe();
   const { data: receipeData } = usePurchases(Number(start), 10, '');
-
+  const modal = useRecoilValue(modalAtom);
   const onChange = useCallback(
     (LPage: number) => {
       setPage(LPage);
@@ -35,7 +37,6 @@ const DashBoard = () => {
     },
     [page]
   );
-  console.log(receipeData);
 
   return (
     <>
@@ -44,7 +45,7 @@ const DashBoard = () => {
         <SearchBtn>영수증 검색</SearchBtn>
       </SearchWrap>
       <Recipe receipeData={receipeData} onChange={onChange} page={page} />
-      <RecipeModal />
+      {modal.show && <RecipeModal />}
     </>
   );
 };
