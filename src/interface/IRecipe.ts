@@ -20,9 +20,13 @@ export interface IRecipeDetail {
   image: {
     small: string;
     medium: string;
+    large: string;
   };
   referencedItems: string;
   assemblyRequired: boolean;
+  totalPrice: {
+    formatted: string;
+  };
 }
 
 export interface IRecipeItem {

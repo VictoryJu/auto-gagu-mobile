@@ -2,10 +2,8 @@ import React, { useState, useLayoutEffect } from 'react';
 import { IRecipe, IRecipeItem } from 'src/interface/IRecipe';
 import styled from 'styled-components';
 import UsePagination from 'src/common/hook/usePagination';
-import useRecipe from 'src/common/hook/usePurchases';
 import { useSetRecoilState } from 'recoil';
 import { modalAtom } from 'src/common/recoil/atom/modal';
-
 type Props = {
   receipeData: IRecipe;
   onChange: Function;
@@ -14,14 +12,6 @@ type Props = {
 
 const Recipe = ({ receipeData, onChange, page }: Props) => {
   const setModal = useSetRecoilState(modalAtom);
-  const handleCopyRecipe = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert('영수증 번호가 복사되었습니다.');
-    } catch (e) {
-      alert('복사 실패');
-    }
-  };
 
   return (
     <>
@@ -55,9 +45,7 @@ const Recipe = ({ receipeData, onChange, page }: Props) => {
                       }).format(new Date(recipe.paymentTime))}{' '}
                       /
                     </span>
-                    <span onClick={() => handleCopyRecipe(recipe.tag)}>
-                      {recipe.tag}
-                    </span>
+                    <span>{recipe.tag}</span>
                   </RecipeLine>
                   <RecipeLine>
                     <span>{recipe.storeName} </span>
